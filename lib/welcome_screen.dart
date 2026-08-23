@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'home_dashboard.dart';
+
 /// First screen of Namma Health: welcome + language choice.
 ///
-/// Language taps only show a SnackBar for now. Translation and
-/// text-to-speech will be added later.
+/// Tapping a language opens the Home Dashboard and passes the
+/// selected language. Full translation will be added later.
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
@@ -13,17 +15,18 @@ class WelcomeScreen extends StatelessWidget {
   static const Color _card = Color(0xFFFFFFFF);
   static const Color _text = Color(0xFF1C2B28);
 
+  static const List<String> languages = [
+    'தமிழ்',
+    'हिंदी',
+    'తెలుగు',
+    'ಕನ್ನಡ',
+    'English',
+  ];
+
   void _onLanguageSelected(BuildContext context, String languageName) {
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: _primaryDark,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        content: Text(
-          'Selected: $languageName',
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-        ),
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => HomeDashboard(selectedLanguage: languageName),
       ),
     );
   }
@@ -48,9 +51,9 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 8),
                       const _HealthcareIllustration(),
-                      const SizedBox(height: 28),
+                      const SizedBox(height: 20),
                       const Text(
                         'Namma Health',
                         textAlign: TextAlign.center,
@@ -71,7 +74,7 @@ class WelcomeScreen extends StatelessWidget {
                           color: _primary,
                         ),
                       ),
-                      const SizedBox(height: 36),
+                      const SizedBox(height: 24),
                       _LanguageCard(
                         onLanguageSelected: (language) {
                           _onLanguageSelected(context, language);
@@ -106,8 +109,8 @@ class _HealthcareIllustration extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 140,
-      height: 140,
+      width: 112,
+      height: 112,
       decoration: BoxDecoration(
         color: WelcomeScreen._card,
         shape: BoxShape.circle,
@@ -121,7 +124,7 @@ class _HealthcareIllustration extends StatelessWidget {
       ),
       child: const Icon(
         Icons.health_and_safety_rounded,
-        size: 78,
+        size: 64,
         color: WelcomeScreen._primary,
       ),
     );
@@ -174,20 +177,15 @@ class _LanguageCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 24),
-          _LanguageButton(
-            label: 'தமிழ்',
-            onPressed: () => onLanguageSelected('தமிழ்'),
-          ),
-          const SizedBox(height: 14),
-          _LanguageButton(
-            label: 'हिंदी',
-            onPressed: () => onLanguageSelected('हिंदी'),
-          ),
-          const SizedBox(height: 14),
-          _LanguageButton(
-            label: 'తెలుగు',
-            onPressed: () => onLanguageSelected('తెలుగు'),
-          ),
+          for (int i = 0; i < WelcomeScreen.languages.length; i++) ...[
+            if (i > 0) const SizedBox(height: 14),
+            _LanguageButton(
+              label: WelcomeScreen.languages[i],
+              onPressed: () {
+                onLanguageSelected(WelcomeScreen.languages[i]);
+              },
+            ),
+          ],
         ],
       ),
     );
