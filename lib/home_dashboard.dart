@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+import 'chat_screen.dart';
 import 'placeholder_screen.dart';
 
 /// Home shown after a language is chosen.
-///
-/// Cards and SOS only open placeholder screens for now.
 class HomeDashboard extends StatefulWidget {
-  const HomeDashboard({super.key, required this.selectedLanguage});
+  const HomeDashboard({
+    super.key,
+    required this.selectedLanguage,
+  });
 
   final String selectedLanguage;
 
@@ -45,12 +47,17 @@ class _HomeDashboardState extends State<HomeDashboard> {
           children: [
             _HomeTab(
               selectedLanguage: widget.selectedLanguage,
+
+              // AI Health Assistant now opens the real ChatScreen.
               onAskAssistant: () {
-                _openPlaceholder(
-                  'Health Assistant',
-                  'AI health assistance will be available here.',
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (context) => const ChatScreen(),
+                  ),
                 );
               },
+
+              // Other features remain placeholders for now.
               onNearbyHospitals: () {
                 _openPlaceholder(
                   'Nearby Hospitals',
@@ -82,10 +89,12 @@ class _HomeDashboardState extends State<HomeDashboard> {
                 );
               },
             ),
+
             const _SimpleTabPlaceholder(
               title: 'Health',
               message: 'Your health information will be available here.',
             ),
+
             const _SimpleTabPlaceholder(
               title: 'Profile',
               message: 'Your profile will be available here.',
@@ -160,7 +169,9 @@ class _HomeTab extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  _WelcomeHeader(selectedLanguage: selectedLanguage),
+                  _WelcomeHeader(
+                    selectedLanguage: selectedLanguage,
+                  ),
                   const SizedBox(height: 24),
                   const Text(
                     'How can we help you?',
@@ -173,8 +184,14 @@ class _HomeTab extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  _AssistantCard(onTap: onAskAssistant),
+
+                  // Opens ChatScreen.
+                  _AssistantCard(
+                    onTap: onAskAssistant,
+                  ),
+
                   const SizedBox(height: 16),
+
                   Row(
                     children: [
                       Expanded(
@@ -194,7 +211,9 @@ class _HomeTab extends StatelessWidget {
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 12),
+
                   Row(
                     children: [
                       Expanded(
@@ -214,8 +233,12 @@ class _HomeTab extends StatelessWidget {
                       ),
                     ],
                   ),
+
                   const SizedBox(height: 20),
-                  _EmergencyCard(onTap: onEmergencySos),
+
+                  _EmergencyCard(
+                    onTap: onEmergencySos,
+                  ),
                 ],
               ),
             ),
@@ -227,7 +250,9 @@ class _HomeTab extends StatelessWidget {
 }
 
 class _WelcomeHeader extends StatelessWidget {
-  const _WelcomeHeader({required this.selectedLanguage});
+  const _WelcomeHeader({
+    required this.selectedLanguage,
+  });
 
   final String selectedLanguage;
 
@@ -301,7 +326,9 @@ class _WelcomeHeader extends StatelessWidget {
 }
 
 class _AssistantCard extends StatelessWidget {
-  const _AssistantCard({required this.onTap});
+  const _AssistantCard({
+    required this.onTap,
+  });
 
   final VoidCallback onTap;
 
@@ -317,7 +344,11 @@ class _AssistantCard extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(20, 22, 20, 22),
           child: Row(
             children: [
-              Icon(Icons.mic_rounded, size: 44, color: Colors.white),
+              Icon(
+                Icons.mic_rounded,
+                size: 44,
+                color: Colors.white,
+              ),
               SizedBox(width: 16),
               Expanded(
                 child: Column(
@@ -387,7 +418,11 @@ class _FeatureCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 40, color: HomeDashboard.primary),
+              Icon(
+                icon,
+                size: 40,
+                color: HomeDashboard.primary,
+              ),
               const SizedBox(height: 12),
               Text(
                 label,
@@ -408,7 +443,9 @@ class _FeatureCard extends StatelessWidget {
 }
 
 class _EmergencyCard extends StatelessWidget {
-  const _EmergencyCard({required this.onTap});
+  const _EmergencyCard({
+    required this.onTap,
+  });
 
   final VoidCallback onTap;
 
@@ -421,11 +458,18 @@ class _EmergencyCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(24),
         child: const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 22),
+          padding: EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 22,
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.sos_rounded, size: 40, color: Colors.white),
+              Icon(
+                Icons.sos_rounded,
+                size: 40,
+                color: Colors.white,
+              ),
               SizedBox(width: 12),
               Flexible(
                 child: Text(
